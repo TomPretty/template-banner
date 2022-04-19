@@ -1,20 +1,13 @@
-import { useContext } from "react";
 import {
   RenderedBannerProps,
   withRenderedProps,
 } from "../hocs/withRenderedProps";
-import {
-  StylesContext,
-  withStylesAsContext,
-} from "../hocs/withStylesAsContext";
 
 // ---- Component ---- //
 
-function MomentTemplateBanner({ copy }: RenderedBannerProps) {
-  const styles = useContext(StylesContext);
-
+function MomentTemplateBanner({ copy, styles }: RenderedBannerProps) {
   return (
-    <article style={{ backgroundColor: styles.backgroundColour }}>
+    <article style={{ backgroundColor: styles?.backgroundColour }}>
       {copy.heading}
 
       {copy.body}
@@ -24,5 +17,5 @@ function MomentTemplateBanner({ copy }: RenderedBannerProps) {
 
 // ---- Exports ---- //
 
-const wrapped = withStylesAsContext(withRenderedProps(MomentTemplateBanner));
+const wrapped = withRenderedProps(MomentTemplateBanner);
 export { wrapped as MomentTemplateBanner };
