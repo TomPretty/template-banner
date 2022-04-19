@@ -1,4 +1,6 @@
-import React, { createContext, useContext } from "react";
+import React from "react";
+import { Banner } from "./banners/Banner";
+import { MomentTemplateBanner } from "./banners/MomentTemplateBanner";
 
 function App() {
   return (
@@ -7,7 +9,7 @@ function App() {
         copy={{ heading: "This is a banner", body: "Give us lots of money" }}
       />
 
-      <TemplateBanner
+      <MomentTemplateBanner
         copy={{
           heading: "This is an investigations moment banner",
           body: "Give us lots of money",
@@ -15,7 +17,7 @@ function App() {
         styles={{ backgroundColour: "red" }}
       />
 
-      <TemplateBanner
+      <MomentTemplateBanner
         copy={{
           heading: "This is an australia moment banner",
           body: "Give us lots of money",
@@ -25,86 +27,5 @@ function App() {
     </div>
   );
 }
-
-// ---- Banners ---- //
-
-interface BannerProps {
-  copy: {
-    heading: string;
-    body: string;
-  };
-}
-
-interface RenderedBannerProps {
-  copy: {
-    heading: JSX.Element;
-    body: JSX.Element;
-  };
-}
-
-function withRenderedProps(
-  Banner: (props: RenderedBannerProps) => JSX.Element
-) {
-  function Wrapped({ copy }: BannerProps) {
-    const heading = (
-      <header>
-        <h2>{copy.heading}</h2>
-      </header>
-    );
-    const body = <p>{copy.body}</p>;
-
-    return <Banner copy={{ heading, body }} />;
-  }
-  return Wrapped;
-}
-
-function _Banner({ copy }: RenderedBannerProps) {
-  return (
-    <article>
-      {copy.heading}
-
-      {copy.body}
-    </article>
-  );
-}
-
-const Banner = withRenderedProps(_Banner);
-
-interface BannerPropsWithStyles extends BannerProps {
-  styles: {
-    backgroundColour: string;
-  };
-}
-
-const StylesContext = createContext({ backgroundColour: "red" });
-
-function withStylesAsContext(Banner: (props: BannerProps) => JSX.Element) {
-  function Wrapped(props: BannerPropsWithStyles) {
-    const { styles, ...bannerProps } = props;
-
-    return (
-      <StylesContext.Provider value={styles}>
-        <Banner {...bannerProps} />
-      </StylesContext.Provider>
-    );
-  }
-  return Wrapped;
-}
-
-function _TemplateMomentBanner({ copy }: RenderedBannerProps) {
-  const styles = useContext(StylesContext);
-
-  return (
-    <article style={{ backgroundColor: styles.backgroundColour }}>
-      {copy.heading}
-
-      {copy.body}
-    </article>
-  );
-}
-
-const TemplateBanner = withStylesAsContext(
-  withRenderedProps(_TemplateMomentBanner)
-);
 
 export default App;
